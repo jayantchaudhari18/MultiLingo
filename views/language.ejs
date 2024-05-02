@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Selection</title>
+    <link rel="stylesheet" href="css/styles-language.css">
+</head>
+<body>
+    <div class="container">
+        <form action="/language" method="post">
+        <h1>Select a Language to Learn</h1>
+        <select id="languageSelect">
+            <option value="">Select Language</option>
+            <option value="English" name="English">English</option>
+            <option value="French"  name="French">French</option>
+            <option value="German"  name="German">German</option>
+            <option value="Korean"  name="Korean">Korean</option>
+        </select>
+        
+        <button onclick="selectLanguage()">Next</button>
+        </form>
+    </div>
+
+    <!-- <script src="languagescript.js"></script> -->
+    
+</body>
+</html>

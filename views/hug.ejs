@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Tutor</title>
+    <link rel="stylesheet" href="css/hug.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to English Tutor</h1>
+        <div id="conversation" class="conversation"></div>
+        <button id="startButton" >Start Listening</button>
+        
+    </div>
+
+    <!-- <script src="hugscript.js"></script> -->
+
+    <script>
+        const startButton = document.getElementById('startButton');
+const conversationDiv = document.getElementById('conversation');
+console.log("started recog");
+// Function to start speech recognition
+startButton.addEventListener('click', () => {
+    startSpeechRecognition();
+});
+
+function startSpeechRecognition() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+        console.log('Speech recognition started');
+    };
+
+    recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        let stringdata=speechToText.toString();
+        conversationDiv.innerHTML += `<p>User: ${speechToText}</p>`;
+        
+        let initial="You are a english tutor who will teach english to user by having a natural conversation with them.Remember you are talking to user from age group of 5 to 50 years.Talk with the user and whenever user commits a mistake in english rectify the statement of the user by explaining him in marathi language and giving the correct english statement.Keep a track of users mistake and make a report at the end of the conversation.Rectify the users english only if the statement contains more than 70% error in english.Do not reply to this prompt.";
+        //Give a call here for the function who will generate a reponse
+        getHuggingFaceResponse({"inputs": initial});//To send predefined prompt
+        // Send the speechToText to the Hugging Face model and get response
+        getHuggingFaceResponse({"inputs": initial+stringdata}).then((response) => {
+
+        let modelResponse= JSON.stringify(response[0].generated_text);
+        console.log(modelResponse);
+
+        conversationDiv.innerHTML += `<p>Model: ${modelResponse}</p>`;
+//     // Convert model response to speech audio
+    textToSpeech(modelResponse);
+	    // console.log(JSON.stringify(response[0].generated_text));
+});
+        
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    recognition.onend = () => {
+        console.log('Speech recognition ended');
+    };
+
+    recognition.start();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Chatgpt api
+
+// Import necessary packages
+require("dotenv").config(); // Load environment variables from .env
+const { Configuration, OpenAI } = require("openai"); // OpenAI SDK
+
+// Get the API key from environment variables
+const apiKey = process.env.OPENAI_API_KEY;
+
+// Set up OpenAI configuration and client
+const configuration = new Configuration({
+  apiKey,
+});
+const openai = new OpenAI(configuration);
+
+// Function to generate text using OpenAI's GPT-3.5
+const generateText = async (prompt, maxTokens = 100) => {
+  const response = await openai.createCompletion({
+    model: "text-davinci-003", // Choose the model
+    prompt, // Input prompt
+    max_tokens: maxTokens, // Maximum number of tokens to generate
+    temperature: 0.7, // Controls randomness
+  });
+
+  // Extract the generated text
+  const generatedText = response.data.choices[0].text.trim();
+  return generatedText;
+};
+
+// Example usage
+(async () => {
+  const prompt = "Write a short story about a brave knight and a dragon.";
+  const result = await generateText(prompt);
+  console.log("Generated Text:");
+  console.log(result);
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// async function getHuggingFaceResponse(data) {
+    
+// 	const response = await fetch(
+// 		"https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct",
+// 		{
+// 			headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: "Bearer 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" },
+// 			method: "POST",
+// 			body: JSON.stringify(data),
+// 		}
+// 	);
+// 	const result = await response.json();
+//     console.log(result);
+// 	return result;
+// }
+
+// getHuggingFaceResponse({"inputs": "tell me something about ai"}).then((response) => {
+// 	console.log(JSON.stringify(response));
+// });
+
+
+
+// https://api-inference.huggingface.co/models/microsoft/DialoGPT-large
+// async function getHuggingFaceResponse(data) {
+//         // console.log(data.body);
+//         const response = await fetch(
+//             "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct",
+//             {   
+//            parameters : {
+//            "max_length": 20,
+//              },
+//                 headers: {
+//                 "Content-Type": "application/json",
+//                 Authorization: "Bearer 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" },
+//                 method: "POST",
+//                 body: JSON.stringify(data),
+//             }
+//         );
+        
+//         const result = await response.json();
+//         // console.log(result);
+//         const fresult=JSON.stringify(result);
+
+//         // console.log(fresult);
+//         const ffresult=JSON.parse(fresult);
+//         // console.log(ffresult[0].generated_text);
+        
+
+//     const modelResponse = ffresult[0].generated_text;
+    
+//     conversationDiv.innerHTML += `<p>Model: ${modelResponse}</p>`;
+//     // Convert model response to speech audio
+//     textToSpeech(modelResponse);
+
+
+//         return result;
+//     }
+    
+
+
+
+
+// function textToSpeech(text) {
+//     // Implement text-to-speech functionality (e.g., using Web Speech API, third-party libraries, etc.)
+//     // Replace this with your actual implementation
+//     console.log('Model reply:', text);
+//     // For demonstration purposes, log the text to the console
+// }
+
+//chatgpt api here
+
+// Import the OpenAI Node.js SDK
+// require("dotenv").config();
+// const { Configuration, OpenAI } = require("openai");
+
+// // Retrieve the API key from environment variables
+// const apiKey = process.env.API_KEY;
+// console.log(apiKey);
+// // Create OpenAI configuration with the API key
+// const configuration = new Configuration({
+//   apiKey,
+// });
+
+// // Create OpenAI client
+// const openai = new OpenAI(configuration);
+
+// Function to generate text using GPT-3.5
+// const generateText = async (prompt, maxTokens = 100) => {
+//   const response = await openai.createCompletion({
+//     model: "text-davinci-003", // You can use other models like 'gpt-3.5-turbo'
+//     prompt,
+//     max_tokens: maxTokens,
+//     temperature: 0.7, // Controls randomness (0.0 is least random, 1.0 is most random)
+//   });
+
+//   // Extract the text from the response
+//   const generatedText = response.data.choices[0].text.trim();
+//   return generatedText;
+// };
+
+// // // Example usage
+// (async () => {
+//   const prompt = "Write a story about a brave knight and a dragon.";
+//   const result = await generateText(prompt);
+//   console.log("Generated Text:");
+//   console.log(result);
+// })();
+
+
+
+function textToSpeech(text) {
+    // Implement text-to-speech functionality (e.g., using Web Speech API, third-party libraries, etc.)
+    // Replace this with your actual implementation
+    // const speakButton = document.getElementById('speakButton');
+    // console.log(text);
+    // Check if speech synthesis is supported by the browser
+if ('speechSynthesis' in window) {
+    // Function to speak the input text
+    const speakText = () => {
+        // Create a SpeechSynthesisUtterance object
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = text; // Set the text to be spoken
+
+        // Speak the text
+        speechSynthesis.speak(utterance);
+    };
+    speakText();
+    // Event listener for the speak button
+    // speakButton.addEventListener('click', speakText);
+} else {
+    // Speech synthesis not supported, show error message
+    alert('Speech synthesis is not supported in this browser. Please try a different browser.');
+}
+
+
+
+    console.log('Model reply:', text);
+    // For demonstration purposes, log the text to the console
+}
+    </script>
+</body>
+</html>

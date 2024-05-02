@@ -1,0 +1,49 @@
+/* Basic styles for the website */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Gradient background */
+}
+
+.container {
+    text-align: center;
+    padding-top: 50px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Styles for the level buttons */
+.level-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.level-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    transition: all 0.3s ease; /* Animation for smooth transitions */
+    cursor: pointer;
+}
+
+.level-btn:hover {
+    background-color: #2980b9; /* Darken the button on hover */
+    transform: scale(1.1); /* Slight zoom-in effect on hover */
+}
+
+.level-btn:active {
+    transform: scale(0.9); /* Scale down on click */
+}
+
+.level-btn:focus {
+    outline: none; /* Remove focus outline */
+}
